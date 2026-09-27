@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>bjj-bracket demo: free BJJ tournament bracket generator</title>
+  <meta name="description" content="Demo of bjj-bracket, a free BJJ tournament bracket generator: single elimination, double elimination, and round robin, with teammates kept apart and an IBJJF-style podium." />
+  <link rel="canonical" href="https://grappleflows.com/brackets" />
+  <style>
+    :root {
+      color-scheme: light dark;
+      --page-bg: #faf9f6;
+      --page-text: #18181b;
+      --page-muted: #52525b;
+      --page-line: #e7e5e4;
+      --page-link: #611f69;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --page-bg: #111014;
+        --page-text: #f4f4f5;
+        --page-muted: #b4b4bd;
+        --page-line: #2e2b36;
+        --page-link: #d8a6ff;
+      }
+      bjj-bracket {
+        --bjj-bracket-accent: #c77dff;
+        --bjj-bracket-accent-contrast: #14121a;
+        --bjj-bracket-accent-soft: rgba(199, 125, 255, 0.15);
+        --bjj-bracket-connector: rgba(199, 125, 255, 0.5);
+        --bjj-bracket-surface: #1c1a22;
+        --bjj-bracket-surface-hover: #26232e;
+        --bjj-bracket-well: #14121a;
+        --bjj-bracket-text: #f4f4f5;
+        --bjj-bracket-text-muted: #c4c4cc;
+        --bjj-bracket-text-subtle: #9a9aa6;
+        --bjj-bracket-line: #2e2b36;
+        --bjj-bracket-line-strong: #3d3946;
+        --bjj-bracket-win: #4ade80;
+        --bjj-bracket-warning-text: #fbbf24;
+        --bjj-bracket-warning-bg: rgba(251, 191, 36, 0.1);
+      }
+    }
+    body {
+      margin: 0;
+      background: var(--page-bg);
+      color: var(--page-text);
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.5;
+    }
+    main { max-width: 1100px; margin: 0 auto; padding: 32px 16px 48px; }
+    header { max-width: 640px; margin: 0 auto 24px; text-align: center; }
+    h1 { margin: 0 0 8px; font-size: 1.8rem; }
+    p { margin: 0 0 8px; color: var(--page-muted); }
+    a { color: var(--page-link); }
+    .log {
+      max-width: 640px;
+      margin: 32px auto 0;
+      padding-top: 16px;
+      border-top: 1px solid var(--page-line);
+      font-size: 14px;
+    }
+    .log h2 { margin: 0 0 8px; font-size: 1rem; }
+    .log ol { margin: 0; padding-left: 20px; color: var(--page-muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+    @media print {
+      header, .log { display: none; }
+      main { padding: 0; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>BJJ bracket generator</h1>
+      <p>A demo of the <code>&lt;bjj-bracket&gt;</code> web component. Paste names and teams, pick a format, and tap winners.</p>
+      <p>The hosted version, with share links, is at <a href="https://grappleflows.com/brackets?utm_source=github&amp;utm_medium=referral&amp;utm_campaign=bjj-bracket&amp;ref=github">grappleflows.com/brackets</a>. Source and docs: <a href="https://github.com/GrappleFlows/bjj-bracket">github.com/GrappleFlows/bjj-bracket</a>.</p>
+    </header>
+
+    <bjj-bracket format="single" storage-key="bjj-bracket-demo" entrants="Alex Rivera, North Side BJJ
+Sam Chen, Riverside Grappling
+Jordan Diaz, North Side BJJ
+Casey Morgan, Eastside Jiu-Jitsu
+Taylor Brooks, Riverside Grappling
+Morgan Lee, Harbor BJJ
+Riley Park, Eastside Jiu-Jitsu
+Jamie Ortiz, Harbor BJJ
+Drew Kim, North Side BJJ
+Avery Shah, Summit Grappling
+Quinn Walsh, Riverside Grappling
+Rowan Cruz, Summit Grappling">
+      <a slot="credit" href="https://grappleflows.com/brackets?utm_source=github&amp;utm_medium=referral&amp;utm_campaign=bjj-bracket&amp;ref=github">Free BJJ bracket generator by Grapple Flows</a>
+    </bjj-bracket>
+
+    <section class="log" aria-labelledby="log-title">
+      <h2 id="log-title">Events</h2>
+      <ol id="log"></ol>
+    </section>
+  </main>
+
+  <!-- Uses the local build (npm run build). Falls back to jsDelivr when dist/ is missing. -->
+  <script>
+    function loadFromCdn() {
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/bjj-bracket@0/dist/bjj-bracket.min.js';
+      document.head.appendChild(s);
+    }
+  </script>
+  <script src="../dist/bjj-bracket.min.js" onerror="loadFromCdn()"></script>
+  <script>
+    (function () {
+      var log = document.getElementById('log');
+      function add(text) {
+        var li = document.createElement('li');
+        li.textContent = text;
+        log.insertBefore(li, log.firstChild);
+        while (log.children.length > 8) log.removeChild(log.lastChild);
+      }
+      document.addEventListener('bjj-bracket:generate', function (e) {
+        add('generate: ' + e.detail.format + ', ' + e.detail.competitors.length + ' competitors');
+      });
+      document.addEventListener('bjj-bracket:result', function (e) {
+        add('result: ' + e.detail.matchId + ' → ' + (e.detail.winner ? e.detail.winner.name : 'cleared'));
+      });
+      document.addEventListener('bjj-bracket:complete', function (e) {
+        var d = e.detail;
+        if (d.podium && d.podium.gold) {
+          add('complete: gold ' + d.podium.gold.name + ', bronze ' + d.podium.bronze.map(function (c) { return c.name; }).join(' and '));
+        } else if (d.standings && d.standings.length) {
+          add('complete: ' + d.standings[0].competitor.name + ' tops the round robin');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

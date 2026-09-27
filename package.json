@@ -1,0 +1,76 @@
+{
+  "name": "bjj-bracket",
+  "version": "0.1.0",
+  "description": "Free BJJ tournament bracket generator: single elimination, double elimination, and round robin, with teammates kept apart and an IBJJF-style podium. A dependency-free TypeScript library and a <bjj-bracket> web component.",
+  "keywords": [
+    "bjj",
+    "brazilian-jiu-jitsu",
+    "jiu-jitsu",
+    "bracket",
+    "tournament",
+    "bracket-generator",
+    "round-robin",
+    "double-elimination",
+    "ibjjf",
+    "grappling",
+    "web-component"
+  ],
+  "homepage": "https://grappleflows.com/brackets",
+  "bugs": {
+    "url": "https://github.com/GrappleFlows/bjj-bracket/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GrappleFlows/bjj-bracket.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Grapple Flows",
+    "url": "https://grappleflows.com"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "unpkg": "./dist/bjj-bracket.min.js",
+  "jsdelivr": "./dist/bjj-bracket.min.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./element": {
+      "types": "./dist/bjj-bracket.d.ts",
+      "import": "./dist/bjj-bracket.js"
+    },
+    "./bjj-bracket.min.js": "./dist/bjj-bracket.min.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "LICENSE",
+    "README.md"
+  ],
+  "sideEffects": [
+    "./dist/bjj-bracket.js",
+    "./dist/bjj-bracket.min.js",
+    "./src/bjj-bracket.ts"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs && tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.4",
+    "esbuild": "^0.28.2",
+    "happy-dom": "^20.14.5",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.2"
+  }
+}
