@@ -17,11 +17,11 @@
   ],
   "homepage": "https://grappleflows.com/brackets",
   "bugs": {
-    "url": "https://github.com/GrappleFlows/bjj-bracket/issues"
+    "url": "https://github.com/grapple-flows/bjj-bracket/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GrappleFlows/bjj-bracket.git"
+    "url": "git+https://github.com/grapple-flows/bjj-bracket.git"
   },
   "license": "MIT",
   "author": {
