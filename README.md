@@ -4,6 +4,8 @@ A free BJJ tournament bracket generator: single elimination, double elimination,
 
 Made by [Grapple Flows](https://grappleflows.com). Use it hosted at [grappleflows.com/brackets](https://grappleflows.com/brackets), or run it on your own site or in your own code.
 
+![bjj-bracket web component showing an 8-competitor single elimination bracket with teammates kept apart and winners advanced](https://raw.githubusercontent.com/GrappleFlows/bjj-bracket/main/docs/screenshot.png)
+
 This package has two parts:
 
 - A **bracket library** with no dependencies and no DOM. It builds the draw, places byes, separates teammates, records winners, and works out the podium or the round robin standings. It runs in browsers, Node, Deno, and workers.
